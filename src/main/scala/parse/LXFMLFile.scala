@@ -2,7 +2,6 @@ package parse
 import utils.TransformationMatrix
 
 import scala.xml.{Attribute, _}
-import scala.xml.transform.{RewriteRule, RuleTransformer}
 
 class LXFMLFile(val filename: String) {
   println("open "+filename)
@@ -14,19 +13,17 @@ class LXFMLFile(val filename: String) {
 object HelloWorld {
   def main(args: Array[String]): Unit = {
 
-    def bla(n: NodeSeq): NodeSeq = n match {
-      case e: Elem => {
+    def deepCopy(n: Node): Node = n match {
+      case e: Elem if e.label=="Bone" =>
         val matrix = new TransformationMatrix((e \ "@transformation").text)
         e % Attribute(null, "transformation", matrix.reflectedMatrix, Null)
-      }
+      case e: Elem if e.label =="RigidSystems" => e.copy(child = Seq.empty[Node])
+      case e: Elem => e.copy(child = e.child.map(deepCopy(_)))
       case _ => n
     }
 
     val file = new LXFMLFile("in1.lxfml")
-
-    val parts = file.source \\ "Bone"
-    println(parts)
-    println(parts.map(bla(_)).mkString("\n"))
+    println(deepCopy(file.source))
 
   }
 }
