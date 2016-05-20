@@ -10,7 +10,7 @@ class TransformationMatrix(val input: String, val reflectionAxis: Int = 0) {
   val toMiddle = Array(2.0, 0.0, 0.4)
 
   def reflectedMatrix: String = {
-    val newTransString = (List("", "-", "-", "-", "", "", "-", "", ""), trans).zipped.map(_ + _)
+    val newTransString = (List("", "-", "-", "-", "", "", "-", "", ""), trans).zipped.map(_ + _).map(removeDoubleMinus(_))
     val newTransDouble = newTransString.map(_.toDouble).toArray
 
     val currentMidPos = Product(transDouble, posDouble, toMiddle)
@@ -22,10 +22,12 @@ class TransformationMatrix(val input: String, val reflectionAxis: Int = 0) {
     val newPosString = newPosDouble.map(_.toString)
 
     println("new trans: "+newTransString.mkString(","))
-    println("new trans: "+newPosString.mkString(","))
+    println("new pos: "+newPosString.mkString(","))
 
-    "bla"
+    (newTransString ++ newPosString).mkString(",")
   }
+
+  def removeDoubleMinus(s: String): String = if(s.startsWith("--")) s.substring(2) else s
 
   def Product(trans: Array[Double], pos: Array[Double], coords: Array[Double]): Array[Double] = {
     val x = trans(0)*coords(0) + trans(3)*coords(1) + trans(6)*coords(2) + pos(0)
