@@ -1,13 +1,13 @@
 package utils
 
-class TransformationMatrix(val input: String, val registerPoints: RegisterPoints, val reflectionAxis: Int = 0) {
+class TransformationMatrix(val input: String, val registerPoints: RegisterPoints, val partNo: Int, val reflectionAxis: Int = 0) {
   val matrix = input.split(",")
   val trans = matrix.slice(0, 9)
   val pos = matrix.slice(9, 12)
   val transDouble = trans.map(_.toDouble)
   val posDouble = pos.map(_.toDouble)
 
-  val toMiddle = registerPoints.mid(3795)
+  val toMiddle = registerPoints.mid(partNo)
 
   def reflectedMatrix: String = {
     val newTransString = (List("", "-", "-", "-", "", "", "-", "", ""), trans).zipped.map(_ + _).map(removeDoubleMinus(_))

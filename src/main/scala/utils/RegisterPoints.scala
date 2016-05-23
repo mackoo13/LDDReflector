@@ -15,4 +15,6 @@ class RegisterPoints(val filename: String) {
 
 
   def mid(partNo: Int): Array[Double] = data(partNo)
+
+  def contains(partNo: Int): Boolean = data.contains(partNo)
 }
