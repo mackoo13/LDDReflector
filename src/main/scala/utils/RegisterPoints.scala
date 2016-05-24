@@ -11,8 +11,6 @@ class RegisterPoints(val filename: String) {
   }
 
   source.close
-  println(data)
-
 
   def mid(partNo: Int): Array[Double] = data(partNo)
 

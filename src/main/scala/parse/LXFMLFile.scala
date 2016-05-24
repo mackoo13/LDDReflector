@@ -9,37 +9,30 @@ class LXFMLFile(val filename: String, val registerPoints: RegisterPoints) {
   var source: Node = XML.loadFile(filename)
   var partCounter = 0
 
-  def parseReflectible(): Unit = {
-    outReflected = parseNode(source, transformPart)
+  def parse(): Unit = {
+    outReflected = parseNode(source, transformReflectible)
+    outRemaining = parseNode(source, removeReflectible)
   }
 
-  def parseRemaining(): Unit = {
-    outRemaining = parseNode(source, removePart)
-  }
-
-  def parseNode(n: Node, fun: Node=>Node): Node = n match {
-    case e: Elem if e.label=="Part" => fun(e)
+  def parseNode(n: Node, fun: Seq[Node]=>Seq[Node]): Node = n match {
+    case e: Elem if e.label=="Bricks" => e.copy(child = fun(e.child))
     case e: Elem if e.label =="RigidSystems" => e.copy(child = Seq.empty[Node])
     case e: Elem => e.copy(child = e.child.map(parseNode(_, fun)))
     case _ => n
   }
 
-  //remove the parts that are not symmetrical
-  def removePart(n: Node): Node = n match {
-    case e: Elem =>
-      val partNo = (e\"@designID").text.toInt
-      if(registerPoints.contains(partNo)) {
-        e.copy(child = e.child.map(transformBone(_, partNo)))
-      } else e.copy(child = Seq.empty[Node])
-    case _ => n
+  def transformReflectible(child: Seq[Node]): Seq[Node] = child.filter(isReflectible(_)).map(transformBrick(_))
+
+  def removeReflectible(child: Seq[Node]): Seq[Node] = child.filter(!isReflectible(_))
+
+  def isReflectible(n: Node): Boolean = n match {
+    case e: Elem if e.label=="Brick" => registerPoints.contains((e\"@designID").text.toInt)
+    case _ => false
   }
 
-  def transformPart(n: Node): Node = n match {
-    case e: Elem =>
-      val partNo = (e\"@designID").text.toInt
-      if(registerPoints.contains(partNo)) {
-        e.copy(child = e.child.map(transformBone(_, partNo)))
-      } else e.copy(child = Seq.empty[Node])
+  def transformBrick(n: Node): Node = n match {
+    case e: Elem if e.label=="Brick" => e.copy(child = e.child.map(transformBrick(_)))
+    case e: Elem if e.label=="Part" => e.copy(child = e.child.map(transformBone(_, (e\"@designID").text.toInt)))
     case _ => n
   }
 
