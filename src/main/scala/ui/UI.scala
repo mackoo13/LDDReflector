@@ -8,7 +8,7 @@ import utils.RegisterPoints
 
 import scala.swing._
 import scala.swing.FileChooser.Result
-import scala.xml.XML
+import scala.xml._
 
 class UI extends MainFrame {
 
@@ -38,6 +38,8 @@ class UI extends MainFrame {
     case e: IOException => Dialog.showMessage(null, "An error occured when trying to open the file.", title="Loading error")
     case e: IllegalStateException => Dialog.showMessage(null, e.getMessage, title="Loading error")
     case e: IllegalArgumentException => Dialog.showMessage(null, e.getMessage, title="Loading error")
+    case e: SAXParseException => Dialog.showMessage(null, e.getMessage, title="SAXParseException")
+    case _: Throwable => println("shit happens")
   }
 
 
@@ -74,12 +76,20 @@ class UI extends MainFrame {
       c
     }
 
+    val labelOut = new Label("<html></html>") {minimumSize=new Dimension(650, 100)}
+    val logger = new Logger(labelOut)
+    logger.printInfo("ble")
+    logger.printInfo("ble")
+    logger.printInfo("ble")
+
     add(Button("Load file") {loadFile()},constraints(0, 0, fill=GridBagPanel.Fill.Horizontal))
+    add(new ScrollPane(labelOut) {val dim=new Dimension(650, 500); preferredSize=dim; maximumSize=dim; minimumSize=dim},
+      constraints(0, 1, gridwidth=3, fill=GridBagPanel.Fill.Both))
   }
 
 }
 
-object PietInterpreter {
+object LDDReflector {
   def main(args: Array[String]) {
     val ui = new UI
     ui.centerOnScreen()

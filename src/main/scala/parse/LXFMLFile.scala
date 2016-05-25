@@ -1,13 +1,15 @@
 package parse
 import utils.{RegisterPoints, TransformationMatrix}
 
-import scala.xml.{Attribute, _}
+import scala.xml._
 
+@throws(classOf[SAXParseException])
 class LXFMLFile(val filename: String, val registerPoints: RegisterPoints) {
   var outReflected: Node = null
   var outRemaining: Node = null
-  var source: Node = XML.loadFile(filename)
   var partCounter = 0
+  var source: Node = XML.loadFile(filename)
+
 
   def parse(): Unit = {
     outReflected = parseNode(source, transformReflectible)
