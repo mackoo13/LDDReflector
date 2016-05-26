@@ -7,7 +7,7 @@ class Logger(val label: Label) {
 
   def printInfo(info: String) = {
     content ::= info
-    label.text = "<html>$ %s</html>".format(content.mkString("<br>$ "))
+    label.text = "<html>$ %s</html>".format(content.reverse .mkString("<br>$ "))
   }
 
 }
