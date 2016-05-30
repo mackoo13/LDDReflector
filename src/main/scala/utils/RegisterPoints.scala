@@ -6,9 +6,10 @@ import ui.Logger
 import scala.io.BufferedSource
 
 
-class RegisterPoints(val filename: String, val logger: Logger = null, val urlFilename: String = "registerPointsUpdateURL.txt") {
+class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: String = "registerPointsUpdateURL.txt") {
 
-  var data = Map[Int, Array[Double]]()
+  private var data = Map[Int, Array[Double]]()
+  private var symmetryAxes = Map[Int, Int]()
   //if(!updateData()) loadData()
   loadData()
 
@@ -21,6 +22,7 @@ class RegisterPoints(val filename: String, val logger: Logger = null, val urlFil
       for (line <- source.getLines) {
         val cols = line.split(",").map(_.trim)
         data += (cols(0).toInt -> cols.slice(1,4).map(_.toDouble))
+        symmetryAxes += (cols(0).toInt -> cols(4).toInt)
       }
       saveData(source.mkString)
       true
@@ -39,6 +41,7 @@ class RegisterPoints(val filename: String, val logger: Logger = null, val urlFil
       for (line <- source.getLines) {
         val cols = line.split(",").map(_.trim)
         data += (cols(0).toInt -> cols.slice(1,4).map(_.toDouble))
+        symmetryAxes += (cols(0).toInt -> cols(4).toInt)
       }
     } catch {
       case e: FileNotFoundException => logger.printInfo("File "+filename+" not found"); false
@@ -53,6 +56,8 @@ class RegisterPoints(val filename: String, val logger: Logger = null, val urlFil
   }
 
   def mid(partNo: Int): Array[Double] = data(partNo)
+
+  def getSymmetryAxis(partNo: Int) = symmetryAxes(partNo)
 
   def contains(partNo: Int): Boolean = data.contains(partNo)
 

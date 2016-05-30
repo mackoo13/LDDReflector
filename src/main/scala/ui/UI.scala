@@ -12,7 +12,12 @@ import scala.xml._
 
 class UI extends MainFrame {
 
-  val labelOut = new Label("<html></html>") {minimumSize=new Dimension(650, 100)}
+  val labelOut = new Label("<html></html>") {}
+  labelOut.horizontalAlignment_=(Alignment.Left)
+  labelOut.verticalAlignment_=(Alignment.Top)
+
+  val labelFooter = new Label("Toltomeja 2016, Brickware Licence") {minimumSize=new Dimension(650, 80)}
+
   val logger = new Logger(labelOut)
   var startDir: File = new File("C:/Users/Maciek/lddr/LDDReflector/in1.lxfml")
   val registerPoints = new RegisterPoints("registerPoints.csv", logger)
@@ -42,31 +47,36 @@ class UI extends MainFrame {
       c
     }
 
-    add(Button("Load file") {loadFile()},constraints(0, 0, fill=GridBagPanel.Fill.Horizontal))
-    add(new ScrollPane(labelOut) {val dim=new Dimension(650, 500); preferredSize=dim; maximumSize=dim; minimumSize=dim},
+    add(Button("Load file") {loadFile()}, constraints(0, 0, gridwidth=3, fill=GridBagPanel.Fill.Both))
+    add(new ScrollPane(labelOut) {val dim=new Dimension(650, 460); preferredSize=dim; maximumSize=dim; minimumSize=dim},
       constraints(0, 1, gridwidth=3, fill=GridBagPanel.Fill.Both))
+    add(labelFooter, constraints(0, 2))
+    add(Button("Flickr") {goToURL("http://www.flickr.com")}, constraints(1, 2))
+    add(Button("Github") {goToURL("http://www.github.com")}, constraints(2, 2))
   }
 
 
   def loadFile() = try {
+    logger.printInfo(" *** loading file *** ")
     val chooser = new FileChooser(startDir)
     chooser.title_=("Select file")
     chooser.fileFilter_=(new FileNameExtensionFilter("LXFML files", "lxfml"))
     val result: Result.Value = chooser.showDialog(null, "Load")
     if (result == Result.Approve) {
       val filePath = chooser.selectedFile.toString
-      logger.printInfo("Loading file: "+filePath)
+      logger.printInfo("File loaded: "+filePath)
       startDir = chooser.selectedFile.getParentFile
 
-//      transformFile(filePath)
-      moveAllToZeroInFile(filePath)
+      transformFile(filePath)
+//      moveAllToZeroInFile(filePath)
     }
   } catch {
-    case e: IOException => Dialog.showMessage(null, "An error occured when trying to open the file.", title="Loading error")
+    //TODO nazwy ze spacjami
+    case e: IOException => Dialog.showMessage(null, "An error occured when trying to open the file. "+e.getMessage, title="Loading error")
     case e: IllegalStateException => Dialog.showMessage(null, e.getMessage, title="Loading error")
     case e: IllegalArgumentException => Dialog.showMessage(null, e.getMessage, title="Loading error")
     case e: SAXParseException => Dialog.showMessage(null, e.getMessage, title="SAXParseException")
-    case _: Throwable => println("shit happens")
+    case e: Throwable => println("shit happens "+e.getMessage)
   }
 
 
@@ -75,6 +85,9 @@ class UI extends MainFrame {
     file.parse()
     XML.save(filePath.dropRight(6)+"_reflected.lxfml", file.outReflected)
     XML.save(filePath.dropRight(6)+"_remaining.lxfml", file.outRemaining)
+    logger.printInfo("Finished reflecting")
+    logger.printInfo(file.reflectedParts+" bricks reflected")
+    logger.printInfo(file.remainingParts+" bricks remaining")
   }
 
 
@@ -84,7 +97,9 @@ class UI extends MainFrame {
     XML.save(filePath.dropRight(6)+"_zero.lxfml", file.source)
   }
 
-
+  def goToURL(url: String) = {
+    println(url)
+  }
 
 
 }

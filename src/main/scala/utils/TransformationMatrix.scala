@@ -1,27 +1,35 @@
 package utils
 
-class TransformationMatrix(val input: String, val registerPoints: RegisterPoints, val partNo: Int, val reflectionAxis: Int = 0) {
+class TransformationMatrix(val input: String, val registerPoints: RegisterPoints, val partNo: Int) {
   val matrix = input.split(",")
   val trans = matrix.slice(0, 9)
   val pos = matrix.slice(9, 12)
   val transDouble = trans.map(_.toDouble)
   val posDouble = pos.map(_.toDouble)
 
+  val reflectionAxis = registerPoints.getSymmetryAxis(partNo)
   val toMiddle = registerPoints.mid(partNo)
 
   def reflectedMatrix: String = {
-    val newTransString = (List("", "-", "-", "-", "", "", "-", "", ""), trans).zipped.map(_ + _).map(removeDoubleMinus(_))
+    val newTransString = newTransToString()
+
     val newTransDouble = newTransString.map(_.toDouble).toArray
 
     val currentMidPos = Product(transDouble, posDouble, toMiddle)
     val wantedMidPos = currentMidPos
-    wantedMidPos(reflectionAxis) *= -1
+    wantedMidPos(0) *= -1
     val newMidPos = Product(newTransDouble, Array(0.0, 0.0, 0.0), toMiddle)
 
     val newPosDouble = Subtraction(wantedMidPos, newMidPos)
     val newPosString = newPosDouble.map(_.toString)
 
     (newTransString ++ newPosString).mkString(",")
+  }
+
+  def newTransToString(): List[String] = reflectionAxis match {
+    case 0 => (List("", "-", "-", "-", "", "", "-", "", ""), trans).zipped.map(_ + _).map(removeDoubleMinus(_))
+    case 2 => (List("-", "", "", "-", "", "", "", "-", "-"), trans).zipped.map(_ + _).map(removeDoubleMinus(_))
+    case _ => List()
   }
 
   def removeDoubleMinus(s: String): String = if(s.startsWith("--")) s.substring(2) else s

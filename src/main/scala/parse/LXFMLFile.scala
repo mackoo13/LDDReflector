@@ -1,4 +1,5 @@
 package parse
+import ui.Logger
 import utils.{RegisterPoints, TransformationMatrix}
 
 import scala.xml._
@@ -7,6 +8,8 @@ import scala.xml._
 class LXFMLFile(val filename: String, val registerPoints: RegisterPoints) {
   var outReflected: Node = null
   var outRemaining: Node = null
+  var reflectedParts = 0
+  var remainingParts = 0
   var partCounter = 0
   var source: Node = XML.loadFile(filename)
 
@@ -14,6 +17,8 @@ class LXFMLFile(val filename: String, val registerPoints: RegisterPoints) {
   def parse(): Unit = {
     outReflected = parseNode(source, transformReflectible)
     outRemaining = parseNode(source, removeReflectible)
+    reflectedParts = countBricks(outReflected)
+    remainingParts = countBricks(outRemaining)
   }
 
   def parseNode(n: Node, fun: Seq[Node]=>Seq[Node]): Node = n match {
@@ -26,6 +31,8 @@ class LXFMLFile(val filename: String, val registerPoints: RegisterPoints) {
   def transformReflectible(child: Seq[Node]): Seq[Node] = child.filter(isReflectible(_)).map(transformBrick(_))
 
   def removeReflectible(child: Seq[Node]): Seq[Node] = child.filter(!isReflectible(_))
+
+  def countBricks(n: Node): Integer = (n \\ "Brick").length
 
   def isReflectible(n: Node): Boolean = n match {
     case e: Elem if e.label=="Brick" => registerPoints.contains((e\"@designID").text.toInt)
