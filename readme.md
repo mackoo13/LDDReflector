@@ -18,6 +18,8 @@ List of supported bricks is always updated on startup, so there is no need to do
 
 ## Troubleshooting
 Should you encounter *any* error during using the application, please let me know as soon as possible (see Contact section below).
+It'd be best if you attached the LXF/LXFML file that caused the problem.
+
 In particular, some bricks might be correctly rotated, but anchored in a wrong place - this probably means I made a mistake in introducing parts dimensions.
 The sooner I correct it, the better for the other users.
 
@@ -27,5 +29,7 @@ So if you ever meet me next to a PaB wall, you know what to do. ;)
 
 # Contact
 toltomeja [at] gmail.com
+
 Github: https://github.com/mackoo13/
+
 Flickr, Eurobricks and other AFOL networks: Toltomeja (https://www.flickr.com/photos/toltomeja/)

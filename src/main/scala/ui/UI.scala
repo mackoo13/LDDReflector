@@ -33,7 +33,7 @@ class UI extends MainFrame {
   contents = new GridBagPanel {
     def constraints(x: Int, y: Int,
                     gridwidth: Int = 1, gridheight: Int = 1,
-                    weightx: Double = 0.0, weighty: Double = 0.0,
+                    weightx: Double = 1.0, weighty: Double = 1.0,
                     fill: GridBagPanel.Fill.Value = GridBagPanel.Fill.None)
     :Constraints = {
       val c = new Constraints
@@ -50,18 +50,19 @@ class UI extends MainFrame {
     add(Button("Load file") {loadFile()}, constraints(0, 0, gridwidth=3, fill=GridBagPanel.Fill.Both))
     add(new ScrollPane(labelOut) {val dim=new Dimension(650, 460); preferredSize=dim; maximumSize=dim; minimumSize=dim},
       constraints(0, 1, gridwidth=3, fill=GridBagPanel.Fill.Both))
-    add(labelFooter, constraints(0, 2))
-    add(Button("Flickr") {goToURL("http://www.flickr.com")}, constraints(1, 2))
-    add(Button("Github") {goToURL("http://www.github.com")}, constraints(2, 2))
+    add(labelFooter, constraints(0, 2, fill=GridBagPanel.Fill.Both, weightx=0.5))
+    add(Button("Flickr") {goToURL("http://www.flickr.com")}, constraints(1, 2, weightx=0.25))
+    add(Button("Github") {goToURL("http://www.github.com")}, constraints(2, 2, weightx=0.25))
   }
 
 
   def loadFile() = try {
-    logger.printInfo(" *** loading file *** ")
     val chooser = new FileChooser(startDir)
     chooser.title_=("Select file")
     chooser.fileFilter_=(new FileNameExtensionFilter("LXFML files", "lxfml"))
     val result: Result.Value = chooser.showDialog(null, "Load")
+    logger.printInfo("")
+    logger.printInfo("Loading file...")
     if (result == Result.Approve) {
       val filePath = chooser.selectedFile.toString
       logger.printInfo("File loaded: "+filePath)

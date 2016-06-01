@@ -1,8 +1,7 @@
 package parse
-import ui.Logger
 import utils.{RegisterPoints, TransformationMatrix}
 
-import scala.xml._
+import scala.xml.{Attribute, _}
 
 @throws(classOf[SAXParseException])
 class LXFMLFile(val filename: String, val registerPoints: RegisterPoints) {
@@ -40,8 +39,14 @@ class LXFMLFile(val filename: String, val registerPoints: RegisterPoints) {
   }
 
   def transformBrick(n: Node): Node = n match {
-    case e: Elem if e.label=="Brick" => e.copy(child = e.child.map(transformBrick(_)))
-    case e: Elem if e.label=="Part" => e.copy(child = e.child.map(transformBone(_, (e\"@designID").text.toInt)))
+    case e: Elem if e.label=="Brick" =>
+      val partNo = (e \ "@designID").text
+      val symmetricalPartNo = registerPoints.getSymmetricalPart(partNo.toInt).toString
+      e.copy(child = e.child.map(transformBrick(_))) % Attribute(null, "designID", symmetricalPartNo, Null)
+    case e: Elem if e.label=="Part" =>
+      val partNo = (e \ "@designID").text
+      val symmetricalPartNo = registerPoints.getSymmetricalPart(partNo.toInt).toString
+      e.copy(child = e.child.map(transformBone(_, partNo.toInt))) % Attribute(null, "designID", symmetricalPartNo, Null)
     case _ => n
   }
 

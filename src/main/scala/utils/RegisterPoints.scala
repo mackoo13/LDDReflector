@@ -10,6 +10,7 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
 
   private var data = Map[Int, Array[Double]]()
   private var symmetryAxes = Map[Int, Int]()
+  private var symmetricalParts = Map[Int, Int]()
   //if(!updateData()) loadData()
   loadData()
 
@@ -21,8 +22,10 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
       source = io.Source.fromURL(url)
       for (line <- source.getLines) {
         val cols = line.split(",").map(_.trim)
-        data += (cols(0).toInt -> cols.slice(1,4).map(_.toDouble))
-        symmetryAxes += (cols(0).toInt -> cols(4).toInt)
+        val partNo = cols(0).toInt
+        data += (partNo -> cols.slice(1,4).map(_.toDouble))
+        symmetryAxes += (partNo -> cols(4).toInt)
+        symmetricalParts += (partNo -> (if(cols.length>=6) cols(5).toInt else partNo))
       }
       saveData(source.mkString)
       true
@@ -40,8 +43,10 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
       source = io.Source.fromFile(filename)
       for (line <- source.getLines) {
         val cols = line.split(",").map(_.trim)
-        data += (cols(0).toInt -> cols.slice(1,4).map(_.toDouble))
-        symmetryAxes += (cols(0).toInt -> cols(4).toInt)
+        val partNo = cols(0).toInt
+        data += (partNo -> cols.slice(1,4).map(_.toDouble))
+        symmetryAxes += (partNo -> cols(4).toInt)
+        symmetricalParts += (partNo -> (if(cols.length>=6) cols(5).toInt else partNo))
       }
     } catch {
       case e: FileNotFoundException => logger.printInfo("File "+filename+" not found"); false
@@ -58,6 +63,8 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
   def mid(partNo: Int): Array[Double] = data(partNo)
 
   def getSymmetryAxis(partNo: Int) = symmetryAxes(partNo)
+
+  def getSymmetricalPart(partNo: Int) = symmetricalParts(partNo)
 
   def contains(partNo: Int): Boolean = data.contains(partNo)
 
