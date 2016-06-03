@@ -68,8 +68,8 @@ class UI extends MainFrame {
       logger.printInfo("File loaded: "+filePath)
       startDir = chooser.selectedFile.getParentFile
 
-      transformFile(filePath)
-//      moveAllToZeroInFile(filePath)
+//      transformFile(filePath)
+      moveAllToZeroInFile(filePath)
     }
   } catch {
     //TODO nazwy ze spacjami
