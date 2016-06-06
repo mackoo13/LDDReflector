@@ -13,8 +13,8 @@ import scala.xml._
 class UI extends MainFrame {
 
   val labelOut = new Label("<html></html>") {}
-  labelOut.horizontalAlignment_=(Alignment.Left)
-  labelOut.verticalAlignment_=(Alignment.Top)
+  labelOut.horizontalAlignment = Alignment.Left
+  labelOut.verticalAlignment = Alignment.Top
 
   val labelFooter = new Label("Toltomeja 2016, Brickware Licence") {minimumSize=new Dimension(650, 80)}
 
@@ -58,8 +58,8 @@ class UI extends MainFrame {
 
   def loadFile() = try {
     val chooser = new FileChooser(startDir)
-    chooser.title_=("Select file")
-    chooser.fileFilter_=(new FileNameExtensionFilter("LXFML files", "lxfml"))
+    chooser.title = "Select file"
+    chooser.fileFilter = new FileNameExtensionFilter("LXFML files", "lxfml")
     val result: Result.Value = chooser.showDialog(null, "Load")
     logger.printInfo("")
     logger.printInfo("Loading file...")
@@ -68,8 +68,8 @@ class UI extends MainFrame {
       logger.printInfo("File loaded: "+filePath)
       startDir = chooser.selectedFile.getParentFile
 
-//      transformFile(filePath)
-      moveAllToZeroInFile(filePath)
+      transformFile(filePath)
+//      moveAllToZeroInFile(filePath)
     }
   } catch {
     //TODO nazwy ze spacjami
