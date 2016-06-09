@@ -15,7 +15,7 @@ class LXFMLFile(val filename: String, val registerPoints: RegisterPoints) {
 
   def parse(): Unit = {
     outReflected = parseNode(source, transformReflectible)
-    outRemaining = parseNode(source, removeReflectible)
+    outRemaining = parseNode(source, removeNotReflectible)
     reflectedParts = countBricks(outReflected)
     remainingParts = countBricks(outRemaining)
   }
@@ -29,7 +29,7 @@ class LXFMLFile(val filename: String, val registerPoints: RegisterPoints) {
 
   def transformReflectible(child: Seq[Node]): Seq[Node] = child.filter(isReflectible(_)).map(transformBrick(_))
 
-  def removeReflectible(child: Seq[Node]): Seq[Node] = child.filter(!isReflectible(_))
+  def removeNotReflectible(child: Seq[Node]): Seq[Node] = child.filter(!isReflectible(_))
 
   def countBricks(n: Node): Integer = (n \\ "Brick").length
 

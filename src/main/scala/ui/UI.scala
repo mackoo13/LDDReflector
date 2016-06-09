@@ -15,21 +15,19 @@ class UI extends MainFrame {
   val labelOut = new Label("<html></html>") {}
   labelOut.horizontalAlignment = Alignment.Left
   labelOut.verticalAlignment = Alignment.Top
-
   val labelFooter = new Label("Toltomeja 2016, Brickware Licence") {minimumSize=new Dimension(650, 80)}
 
   val logger = new Logger(labelOut)
   var startDir: File = new File("C:/Users/Maciek/lddr/LDDReflector/in1.lxfml")
   val registerPoints = new RegisterPoints("registerPoints.csv", logger)
 
-  //GUI PROPERTIES
+  //GUI properties
   preferredSize = new Dimension(800, 600)
   resizable = false
   title = "LDD Reflector"
-
   logger.printInfo("Welcome to LDDReflector!")
 
-  //GUI LAYOUT
+  //GUI layout
   contents = new GridBagPanel {
     def constraints(x: Int, y: Int,
                     gridwidth: Int = 1, gridheight: Int = 1,
@@ -61,10 +59,9 @@ class UI extends MainFrame {
     chooser.title = "Select file"
     chooser.fileFilter = new FileNameExtensionFilter("LXFML files", "lxfml")
     val result: Result.Value = chooser.showDialog(null, "Load")
-    logger.printInfo("")
-    logger.printInfo("Loading file...")
     if (result == Result.Approve) {
       val filePath = chooser.selectedFile.toString
+      logger.printInfo("")
       logger.printInfo("File loaded: "+filePath)
       startDir = chooser.selectedFile.getParentFile
 
@@ -80,7 +77,6 @@ class UI extends MainFrame {
     case e: Throwable => println("shit happens "+e.getMessage)
   }
 
-
   def transformFile(filePath: String) = {
     val file = new LXFMLFile(filePath, registerPoints)
     file.parse()
@@ -91,7 +87,6 @@ class UI extends MainFrame {
     logger.printInfo(file.remainingParts+" bricks remaining")
   }
 
-
   def moveAllToZeroInFile(filePath: String) = {
     val file = new LXFMLFile(filePath, registerPoints)
     file.moveAllPartsToZero()
@@ -101,8 +96,6 @@ class UI extends MainFrame {
   def goToURL(url: String) = {
     println(url)
   }
-
-
 }
 
 object LDDReflector {

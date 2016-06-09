@@ -8,9 +8,9 @@ import scala.io.BufferedSource
 
 class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: String = "registerPointsUpdateURL.txt") {
 
-  private var data = Map[Int, Array[Double]]()
-  private var symmetryAxes = Map[Int, Int]()
-  private var symmetricalParts = Map[Int, Int]()
+  private var coords = Map[Int, Array[Double]]()
+  private var symmetryAxis = Map[Int, Int]()
+  private var symmetricalPart = Map[Int, Int]()
   //if(!updateData()) loadData()
   loadData()
 
@@ -23,9 +23,9 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
       for (line <- source.getLines) {
         val cols = line.split(",").map(_.trim)
         val partNo = cols(0).toInt
-        data += (partNo -> cols.slice(1,4).map(_.toDouble))
-        symmetryAxes += (partNo -> cols(4).toInt)
-        symmetricalParts += (partNo -> (if(cols.length>=6) cols(5).toInt else partNo))
+        coords += (partNo -> cols.slice(1,4).map(_.toDouble))
+        symmetryAxis += (partNo -> cols(4).toInt)
+        symmetricalPart += (partNo -> (if(cols.length>=6) cols(5).toInt else partNo))
       }
       saveData(source.mkString)
       true
@@ -44,9 +44,9 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
       for (line <- source.getLines) {
         val cols = line.split(",").map(_.trim)
         val partNo = cols(0).toInt
-        data += (partNo -> cols.slice(1,4).map(_.toDouble))
-        symmetryAxes += (partNo -> cols(4).toInt)
-        symmetricalParts += (partNo -> (if(cols.length>=6) cols(5).toInt else partNo))
+        coords += (partNo -> cols.slice(1,4).map(_.toDouble))
+        symmetryAxis += (partNo -> cols(4).toInt)
+        symmetricalPart += (partNo -> (if(cols.length>=6) cols(5).toInt else partNo))
       }
     } catch {
       case e: FileNotFoundException => logger.printInfo("File "+filename+" not found"); false
@@ -60,12 +60,12 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
     finally writer.close()
   }
 
-  def mid(partNo: Int): Array[Double] = data(partNo)
+  def mid(partNo: Int): Array[Double] = coords(partNo)
 
-  def getSymmetryAxis(partNo: Int) = symmetryAxes(partNo)
+  def getSymmetryAxis(partNo: Int) = symmetryAxis(partNo)
 
-  def getSymmetricalPart(partNo: Int) = symmetricalParts(partNo)
+  def getSymmetricalPart(partNo: Int) = symmetricalPart(partNo)
 
-  def contains(partNo: Int): Boolean = data.contains(partNo)
+  def contains(partNo: Int): Boolean = coords.contains(partNo)
 
 }

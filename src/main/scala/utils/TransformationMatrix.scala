@@ -15,6 +15,7 @@ class TransformationMatrix(val input: String, val registerPoints: RegisterPoints
 
     val newTransDouble = newTransString.map(_.toDouble).toArray
 
+    //keep register point in the same place
     val currentMidPos = Product(transDouble, posDouble, toMiddle)
     val wantedMidPos = currentMidPos
     wantedMidPos(0) *= -1
