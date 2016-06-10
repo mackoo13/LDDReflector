@@ -1,7 +1,9 @@
 package ui
 
+import java.awt.Desktop
 import javax.swing.filechooser.FileNameExtensionFilter
 import java.io.{File, IOException}
+import java.net.URI
 
 import parse.LXFMLFile
 import utils.RegisterPoints
@@ -49,8 +51,8 @@ class UI extends MainFrame {
     add(new ScrollPane(labelOut) {val dim=new Dimension(650, 460); preferredSize=dim; maximumSize=dim; minimumSize=dim},
       constraints(0, 1, gridwidth=3, fill=GridBagPanel.Fill.Both))
     add(labelFooter, constraints(0, 2, fill=GridBagPanel.Fill.Both, weightx=0.5))
-    add(Button("Flickr") {goToURL("http://www.flickr.com")}, constraints(1, 2, weightx=0.25))
-    add(Button("Github") {goToURL("http://www.github.com")}, constraints(2, 2, weightx=0.25))
+    add(Button("Flickr") {goToURL("https://www.flickr.com/photos/toltomeja/")}, constraints(1, 2, weightx=0.25))
+    add(Button("Github") {goToURL("http://www.github.com/mackoo13")}, constraints(2, 2, weightx=0.25))
   }
 
 
@@ -69,19 +71,18 @@ class UI extends MainFrame {
 //      moveAllToZeroInFile(filePath)
     }
   } catch {
-    //TODO nazwy ze spacjami
     case e: IOException => Dialog.showMessage(null, "An error occured when trying to open the file. "+e.getMessage, title="Loading error")
     case e: IllegalStateException => Dialog.showMessage(null, e.getMessage, title="Loading error")
     case e: IllegalArgumentException => Dialog.showMessage(null, e.getMessage, title="Loading error")
     case e: SAXParseException => Dialog.showMessage(null, e.getMessage, title="SAXParseException")
-    case e: Throwable => println("shit happens "+e.getMessage)
+    case e: Throwable => println("Something went wrong.  "+e.getMessage)
   }
 
   def transformFile(filePath: String) = {
     val file = new LXFMLFile(filePath, registerPoints)
     file.parse()
-    XML.save(filePath.dropRight(6)+"_reflected.lxfml", file.outReflected)
-    XML.save(filePath.dropRight(6)+"_remaining.lxfml", file.outRemaining)
+    XML.save(filePath.dropRight(6)+"_reflected.lxfml", file.outReflected, "UTF-8")
+    XML.save(filePath.dropRight(6)+"_remaining.lxfml", file.outRemaining, "UTF-8")
     logger.printInfo("Finished reflecting")
     logger.printInfo(file.reflectedParts+" bricks reflected")
     logger.printInfo(file.remainingParts+" bricks remaining")
@@ -94,7 +95,9 @@ class UI extends MainFrame {
   }
 
   def goToURL(url: String) = {
-    println(url)
+    if(Desktop.isDesktopSupported) {
+      Desktop.getDesktop.browse(new URI(url))
+    }
   }
 }
 
