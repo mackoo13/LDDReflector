@@ -39,7 +39,7 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
         val partNo = cols(0).toInt
         coords += (partNo -> cols.slice(1,4).map(_.toDouble))
         symmetryAxis += (partNo -> cols(4).toInt)
-        symmetricalPart += (partNo -> (if(cols.length>=6) cols(5).toInt else partNo))
+        symmetricalPart += (partNo -> (if(cols(5)!="0") cols(5).toInt else partNo))
       }
     } catch {
       case e: FileNotFoundException => logger.printInfo("File "+filename+" not found"); false
