@@ -1,1 +1,1 @@
-http://www.github.com
+http://student.agh.edu.pl/~kocot/lddr/registerPoints.csv

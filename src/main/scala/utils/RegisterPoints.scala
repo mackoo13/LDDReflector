@@ -11,7 +11,7 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
   private var coords = Map[Int, Array[Double]]()
   private var symmetryAxis = Map[Int, Int]()
   private var symmetricalPart = Map[Int, Int]()
-  //if(!updateData()) loadData()
+  updateData()
   loadData()
 
   def updateData(): Boolean = {
@@ -20,13 +20,6 @@ class RegisterPoints(val filename: String, val logger: Logger, val urlFilename: 
       val url = io.Source.fromFile(urlFilename).mkString
       logger.printInfo("Loading file from "+url)
       source = io.Source.fromURL(url)
-      for (line <- source.getLines) {
-        val cols = line.split(",").map(_.trim)
-        val partNo = cols(0).toInt
-        coords += (partNo -> cols.slice(1,4).map(_.toDouble))
-        symmetryAxis += (partNo -> cols(4).toInt)
-        symmetricalPart += (partNo -> (if(cols.length>=6) cols(5).toInt else partNo))
-      }
       saveData(source.mkString)
       true
     } catch {
