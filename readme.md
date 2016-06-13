@@ -16,7 +16,9 @@ The program will create two files:
 
 To convert it back to .lxf format, create a new .lxf file and use Import (Ctrl+I).
 
-At the moment, about 450 types of bricks are supported. Further are possible to reflect, but so far not included to the application.
+## Supported bricks
+
+At the moment, about 450 types of bricks are supported. Much more are possible to reflect, but so far not included to the application.
 Adding new parts' dimensions is quite time-consuming, so at this stage I concentrated only on the more common ones.
 If you need a particular part support, I can add it for you, so feel free to contact me.
 
