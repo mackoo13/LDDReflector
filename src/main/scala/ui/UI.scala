@@ -20,7 +20,7 @@ class UI extends MainFrame {
   val labelFooter = new Label("Toltomeja 2016, Brickware Licence") {minimumSize=new Dimension(650, 80)}
 
   val logger = new Logger(labelOut)
-  var startDir: File = new File("C:/Users/Maciek/lddr/LDDReflector/in1.lxfml")
+  var startDir: File = new File(".")
   val registerPoints = new RegisterPoints("registerPoints.csv", logger)
 
   //GUI properties
