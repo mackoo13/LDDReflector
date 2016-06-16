@@ -1,1 +1,1 @@
-http://student.agh.edu.pl/~kocot/lddr/registerPoints.csv
+https://raw.githubusercontent.com/mackoo13/LDDReflector/master/registerPoints.csv
