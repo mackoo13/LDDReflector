@@ -1,6 +1,8 @@
 # LDDReflector
 A tool for transforming Lego Digital Designer models into their mirror reflection.
 
+![Example](doc/lddr_example.png?raw=true "Example")
+
 ## Usage
 If you have SBT installed, simply type the command:
 `sbt run`
