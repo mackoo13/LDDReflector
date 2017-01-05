@@ -7,7 +7,7 @@ A tool for transforming Lego Digital Designer models into their mirror reflectio
 If you have SBT installed, simply type the command:
 `sbt run`
 
-Alternatively, you can run [LDDReflector.jar file](https://www.dropbox.com/s/8tmy4wqkyu95tz1/jar.rar?dl=0) (you'll need Java: http://www.java.com/en/download/)
+Alternatively, you can run [LDDReflector.jar file](https://www.dropbox.com/s/8tmy4wqkyu95tz1/jar.rar?dl=0) (you'll need Java to run it: http://www.java.com/en/download/)
 
 To load the LDD model, you need the file in LXFML format. The easiest way to save it is using Export option in LDD (Ctrl+E).
 
@@ -20,7 +20,8 @@ To convert it back to .lxf format, create a new .lxf file and use Import (Ctrl+I
 
 ## Supported bricks
 
-At the moment, about 450 types of bricks are supported. Much more are possible to reflect, but so far not included to the application.
+At the moment, about 450 types of bricks are supported - for my models, this gives over 90% coverage. Much more are possible to reflect, but so far not included to the application.
+
 Adding new parts' dimensions is quite time-consuming, so at this stage I concentrated only on the more common ones.
 If you need a particular part support, I can add it for you, so feel free to contact me.
 
