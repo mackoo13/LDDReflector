@@ -7,7 +7,7 @@ A tool for transforming Lego Digital Designer models into their mirror reflectio
 If you have SBT installed, simply type the command:
 `sbt run`
 
-Alternatively, you can run LDDReflector.jar file (you'll need Java: http://www.java.com/en/download/)
+Alternatively, you can run [LDDReflector.jar file](https://www.dropbox.com/s/8tmy4wqkyu95tz1/jar.rar?dl=0) (you'll need Java: http://www.java.com/en/download/)
 
 To load the LDD model, you need the file in LXFML format. The easiest way to save it is using Export option in LDD (Ctrl+E).
 
