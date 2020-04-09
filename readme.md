@@ -1,6 +1,8 @@
 # LDDReflector
 A tool for transforming Lego Digital Designer models into their mirror reflection.
 
+_Note, April 2020: The feature of reflecting a model has been introduced to [Stud.io](https://www.bricklink.com/v3/studio/). Since it is built in, I recommend using it instead of LDDReflector. Thank you for using my tool, and for all the feedback I got from the users._
+
 ![Example](doc/lddr_example.png?raw=true "Example")
 
 ## Usage
